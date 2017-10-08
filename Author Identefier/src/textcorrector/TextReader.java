@@ -28,7 +28,7 @@ public class TextReader  {
 		while ( (s = br.readLine()) != null) 
 		buffer.append(s);
 		br.close();
-		text = TextCorrector.correct(buffer.toString());
+		text = TextCorrector.correct1(buffer.toString());
 		
 		} catch (IOException e)
 		{

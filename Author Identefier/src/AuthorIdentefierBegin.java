@@ -13,15 +13,12 @@ import models.Matrix;
 
 public class AuthorIdentefierBegin {
 	
-	static List<FileExtended> textInfo;
-	public static final int MIN = 1;
-	public static final int STRING_SIZE_MIN = 200000;
-
+	static List<FileExtended> textInfo = new ArrayList<FileExtended>();
 
 	public static void main(String[] args) throws IOException {
 		
 		BufferedReader reader = new BufferedReader( new InputStreamReader (System.in));		
-		List<String> resultsAuthor = new ArrayList<>();
+		List<String> resultsAuthor;
 		
 		System.out.println("Put your file into the folder C:\\text1\\ (file name shoud be \"anon\")");
 		
@@ -29,7 +26,7 @@ public class AuthorIdentefierBegin {
 		////TODO: ЗАПИЛИТЬ СЧИТЫВАНИЕ АНОНИМНОГО КУСКА ТЕКСТА ИЗ ФАЙЛА ИЛИ ОТКУДА НИБУДЬ ЕЩЕ
 		File fileAnon = new File("C:\\text1\\anon");                       //
 		FileExtended anonFileExtended = new FileExtended(fileAnon);        //  считывание анонимного текста
-		Matrix anonText = new Matrix();                                    //  и составление его матрицы
+		Matrix anonText = new Matrix();          						   //  и составление его матрицы
 		BigrammCounter.count(anonFileExtended.text,anonText);              //
 		
 		
@@ -63,6 +60,8 @@ public class AuthorIdentefierBegin {
 			{
 				Matrix littleBit = new Matrix();
 				int beg = (int)(Math.random()*fAuthor.text.length()-analyseSize);
+				//System.out.println(fAuthor.author);
+				//System.out.println(fAuthor.text.length());
 				if (beg<0)
 					beg = 0;
 				String textBit = fAuthor.text
