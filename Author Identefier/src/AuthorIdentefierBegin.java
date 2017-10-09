@@ -9,6 +9,7 @@ import models.BigrammCounter;
 import models.DistanceMethodManager;
 import models.FileExtended;
 import models.Matrix;
+import models.Matrix1;
 
 
 public class AuthorIdentefierBegin {
@@ -18,7 +19,8 @@ public class AuthorIdentefierBegin {
 	public static void main(String[] args) throws IOException {
 		
 		BufferedReader reader = new BufferedReader( new InputStreamReader (System.in));		
-		List<String> resultsAuthor;
+		List<String> resultsAuthor2;
+		List<String> resultsAuthor3;
 		
 		System.out.println("Put your file into the folder C:\\text1\\ (file name shoud be \"anon\")");
 		
@@ -26,8 +28,11 @@ public class AuthorIdentefierBegin {
 		////TODO: ЗАПИЛИТЬ СЧИТЫВАНИЕ АНОНИМНОГО КУСКА ТЕКСТА ИЗ ФАЙЛА ИЛИ ОТКУДА НИБУДЬ ЕЩЕ
 		File fileAnon = new File("C:\\text1\\anon");                       //
 		FileExtended anonFileExtended = new FileExtended(fileAnon);        //  считывание анонимного текста
-		Matrix anonText = new Matrix();          						   //  и составление его матрицы
-		BigrammCounter.count(anonFileExtended.text,anonText);              //
+		//Matrix anonText = new Matrix();          						   //  и составление его матрицы
+		Matrix1 anonText3 = new Matrix1();
+		Matrix anonText2 = new Matrix();
+		BigrammCounter.count1(anonFileExtended.text,anonText3);              //
+		BigrammCounter.count(anonFileExtended.text,anonText2);
 		
 		
 		File file = new File("C:\\text");               //папка с текстами авторов
@@ -42,33 +47,39 @@ public class AuthorIdentefierBegin {
 		int analyseSize;									 //
 		analyseSize = Integer.valueOf(analyseSizeString);    //
 		
-		System.out.println("Choose method: (khmeleva(mod)/xi2/divKulbaka(mod))");
-		
+		//System.out.println("Choose method: (khmeleva(mod)/xi2/divKulbaka(mod))");
+		System.out.println("Press enter to continue");
 		
 		//TODO дописать цикл , где используется один из методов (юзни кейс) 
 		
 		String method = reader.readLine();
 		while (!method.equals("esc"))
 		{	
-			resultsAuthor = new ArrayList<String>();
+			resultsAuthor2 = new ArrayList<String>();
+			resultsAuthor3 = new ArrayList<String>();
 		for (int j = 0; j < 20; j++)
 		{
-			
 			double distance1 = Integer.MAX_VALUE;
-			String authorName = "";
+			double distance0 = Integer.MAX_VALUE;
+			String authorName2 = "";
+			String authorName3 = "";
+
 			for (FileExtended fAuthor:textInfo)
 			{
-				Matrix littleBit = new Matrix();
+				Matrix1 littleBit = new Matrix1();
+				Matrix litBit = new Matrix();
 				int beg = (int)(Math.random()*fAuthor.text.length()-analyseSize);
-				//System.out.println(fAuthor.author);
-				//System.out.println(fAuthor.text.length());
 				if (beg<0)
 					beg = 0;
 				String textBit = fAuthor.text
 						.substring(beg,beg + analyseSize);
-				BigrammCounter.count(textBit, littleBit);
-				double distance = Integer.MAX_VALUE;
-				switch (method)
+				BigrammCounter.count1(textBit, littleBit);
+				BigrammCounter.count(textBit, litBit);
+				double distance2 = Integer.MAX_VALUE;
+				double distance3 = Integer.MAX_VALUE;
+				distance3 = DistanceMethodManager.xi2tri(anonText3, littleBit);
+				distance2 = DistanceMethodManager.xtwoMera(anonText2, litBit);
+			/*	switch (method)
 				{
 					case "khmeleva":
 						distance = DistanceMethodManager.methodKhmeleva(anonText, littleBit);
@@ -85,21 +96,32 @@ public class AuthorIdentefierBegin {
 					case "divKulbakamod":
 						distance = DistanceMethodManager.methodDivergenciyaKulbakaMod(anonText, littleBit);
 						break;
-				}
-				if (distance < distance1)
+				}  */
+				if (distance3 < distance1)
 				{
-					distance1 = distance;
-					authorName = fAuthor.author;
+					distance1 = distance3;
+					authorName3 = fAuthor.author;
+				}
+				if (distance2 < distance0)
+				{
+					distance0 = distance2;
+					authorName2 = fAuthor.author;
 				}
 			}
-			resultsAuthor.add(authorName + " " + distance1);
+			resultsAuthor2.add(authorName2 + " " + distance0);
+			resultsAuthor3.add(authorName3 + " " + distance1);
 		}
-		
+		System.out.println("ДЛЯ ТРИГРАМ");
 		//TODO намулюй вывод результата (готово)
-		for (String res : resultsAuthor) {
+		for (String res : resultsAuthor3) {
 			System.out.println(res);
 		}
-		method = reader.readLine();
-	}
+		
+		System.out.println("\n\n\nДЛЯ БИГРАМ");
+		for (String res : resultsAuthor2) {
+			System.out.println(res);
+		}
+			method = reader.readLine();
+		}
 	}
 }

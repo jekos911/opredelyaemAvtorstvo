@@ -88,4 +88,24 @@ public class DistanceMethodManager {
 			}
 		return 2*resultat;
 	}
+	
+	public static double xi2tri(Matrix1 first, Matrix1 second)
+	{
+		double resultat = 0.0d;
+		
+		double n1 = first.countLetters;
+		double n2 = second.countLetters;
+		for (int i = 0; i < 32; i++)
+			for (int j = 0; j < 32; j++)
+				for (int k=0; k<32; k++)
+			{
+				double m1ijk = first.stat[i][j][k];
+				double m2ijk= second.stat[i][j][k];
+				
+			
+				if (m2ijk !=0 && m1ijk != 0 && n1!= 0 && n2!=0)
+				resultat+= Math.abs(m1ijk/n1*Math.log((m1ijk/n1)/(m2ijk/n2)));
+			}
+		return resultat;
+	}
 }
